@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¿Todos pueden ganar? — La desigualdad detrás de la Fórmula 1</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 82'%3E%3Cpath d='M8 22 L34 22 L28 48 L12 48 Z' fill='%23E21E20'/%3E%3Cpath d='M26 52 L34 36 C48 25, 68 18, 92 12 L97 6 L104 14 L112 31 L142 36 L160 40 L214 48 L244 57 L252 68 L178 68 L174 62 L74 62 L70 68 L28 68 Z' fill='%23E21E20'/%3E%3Ccircle cx='52' cy='57' r='17.5' fill='%23E21E20'/%3E%3Ccircle cx='198' cy='57' r='16.5' fill='%23E21E20'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #E21E20;
+      --black: #000000;
+      --white: #FDFDFD;
+      --gray: #D9D9D9;
+      --blue: #004AAD;
+      --green: #2BB673;
+      --text-muted: #4A4A4A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--white);
+      color: var(--black);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-wrapper {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 24px 56px;
+    }
+
+    /* Textura sutil de pista / bandera a cuadros (~9% opacidad) */
+    .title-texture {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .title-texture::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.09;
+      background-image:
+        linear-gradient(45deg, #000000 25%, transparent 25%),
+        linear-gradient(-45deg, #000000 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #000000 75%),
+        linear-gradient(-45deg, transparent 75%, #000000 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      mask-image: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.05) 100%);
+      -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.05) 100%);
+      z-index: 0;
+    }
+
+    .title-texture > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 1. ENCABEZADO Y MARCA VISUAL */
+    .hero-header {
+      padding: 20px 24px 24px;
+      border-bottom: 2px solid var(--black);
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .hero-titles {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .kicker {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .main-title {
+      font-size: clamp(2.1rem, 5.2vw, 4.1rem);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .brand-mark {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding-top: 6px;
+    }
+
+    .brand-mark svg {
+      display: block;
+      width: 285px;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .bajada-band {
+      padding: 18px 24px;
+      border-bottom: 2px solid var(--black);
+      background-color: var(--white);
+    }
+
+    .bajada-text {
+      font-size: clamp(1.05rem, 1.6vw, 1.22rem);
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--black);
+      max-width: 920px;
+    }
+
+    /* SECCIONES */
+    .story-section {
+      padding: 36px 0 32px;
+      border-bottom: 2px solid var(--black);
+    }
+
+    .section-heading-box {
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      border-left: 5px solid var(--red);
+    }
+
+    .section-title {
+      font-size: clamp(1.35rem, 2.5vw, 1.95rem);
+      font-weight: 900;
+      letter-spacing: -0.015em;
+      text-transform: uppercase;
+      color: var(--black);
+      line-height: 1.15;
+    }
+
+    .section-subtitle {
+      font-size: 0.94rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* CONTENEDORES DE GRÁFICOS */
+    .chart-card {
+      background: var(--white);
+      border: 1px solid var(--gray);
+      border-radius: 6px;
+      padding: 18px 18px 16px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 12px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: var(--black);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .swatch-red { background: var(--red); }
+    .swatch-blue { background: var(--blue); }
+    .swatch-green { background: var(--green); }
+
+    .chart-scroll {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .chart-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      font-family: 'Inter', sans-serif;
+      user-select: none;
+    }
+
+    .chart-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .control-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+    }
+
+    .season-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border: 1.5px solid var(--black);
+      border-radius: 4px;
+      background-color: var(--white);
+      color: var(--black);
+      cursor: pointer;
+    }
+
+    .season-select:focus {
+      outline: 2px solid var(--red);
+      outline-offset: 2px;
+    }
+
+    .chart-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .chart-note-right {
+      margin-left: auto;
+    }
+
+    /* Layout Gráfico 2 con leyenda a la derecha */
+    .chart2-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 150px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .chart2-side-legend {
+      padding-top: 8px;
+      font-size: 0.85rem;
+    }
+
+    .chart2-side-legend-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--black);
+    }
+
+    .chart2-side-legend .legend-item {
+      display: flex;
+      margin-bottom: 6px;
+    }
+
+    /* BLOQUES NARRATIVOS ("¿Qué nos dice?" / "¿Por qué importa?") */
+    .narrative-row {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      margin-top: 8px;
+    }
+
+    .narrative-prompt {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .narrative-prompt .arrow {
+      color: var(--red);
+      font-weight: 900;
+    }
+
+    .narrative-box {
+      border: 1.5px solid var(--gray);
+      border-left: 4px solid var(--red);
+      border-radius: 4px;
+      padding: 18px 22px;
+      background-color: var(--white);
+    }
+
+    .narrative-box p {
+      font-size: 0.98rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--black);
+    }
+
+    /* PIE / REFERENCIAS */
+    .references-footer {
+      padding: 26px 0 8px;
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .references-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .references-label {
+      font-size: 0.92rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .footer-isotipo {
+      display: block;
+      width: 88px;
+      height: auto;
+      opacity: 0.9;
+    }
+
+    .references-text {
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* TOOLTIP INTERACTIVO */
+    .tooltip {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.12s ease, transform 0.12s ease;
+      background-color: var(--black);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 3px solid var(--red);
+      border-radius: 5px;
+      padding: 10px 13px;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      min-width: 245px;
+      max-width: 340px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tt-title {
+      font-weight: 900;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(217, 217, 217, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tt-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: var(--red);
+      color: var(--white);
+      white-space: nowrap;
+    }
+
+    .tt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 3px;
+    }
+
+    .tt-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #EAEAEA;
+    }
+
+    .tt-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .tt-val {
+      font-weight: 700;
+      color: var(--white);
+      white-space: nowrap;
+    }
+
+    .tt-sub {
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px solid rgba(217, 217, 217, 0.2);
+      font-size: 0.76rem;
+      color: #CCCCCC;
+    }
+
+    /* Efectos hover en barras SVG */
+    .bar-group-hover {
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    .bar-seg {
+      cursor: pointer;
+      transition: filter 0.12s ease, opacity 0.12s ease;
+    }
+
+    .bar-seg:hover {
+      filter: brightness(1.08);
+    }
+
+    @media (max-width: 860px) {
+      .hero-top {
+        flex-direction: column-reverse;
+        gap: 14px;
+      }
+
+      .brand-mark {
+        align-items: flex-start;
+      }
+
+      .brand-mark svg {
+        width: 230px;
+      }
+
+      .chart-note-right {
+        margin-left: 0;
+      }
+
+      .chart2-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .chart2-side-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        padding-top: 0;
+      }
+
+      .chart2-side-legend-title {
+        margin-bottom: 0;
+      }
+
+      .chart2-side-legend .legend-item {
+        margin-bottom: 0;
+      }
+
+      .narrative-row,
+      .references-footer {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- 1. ENCABEZADO CON MARCA VISUAL, TÍTULO Y BAJADA -->
+    <header class="hero-header title-texture">
+      <div class="hero-top">
+        <div class="hero-titles">
+          <p class="kicker">¿TODOS PUEDEN GANAR?</p>
+          <h1 class="main-title">La desigualdad detrás<br />de la Fórmula 1</h1>
+        </div>
+
+        <!-- Logotipo oficial de marca "$1" + monoplaza F1 -->
+        <div class="brand-mark" aria-label="Logotipo de marca $1 Fórmula 1">
+          <svg viewBox="0 0 380 105" role="img" aria-labelledby="logoTitle">
+            <title id="logoTitle">Logotipo $1 — F1: ¿Todos pueden ganar?</title>
+            <g transform="translate(30, 82) skewX(-16)">
+              <text x="0" y="0" font-family="Inter, Arial Black, sans-serif" font-weight="900" font-size="88" fill="#000000" letter-spacing="-4">$</text>
+            </g>
+            <g transform="translate(88, 86) skewX(-16)">
+              <path d="M8 -62 L44 -70 L44 0 L21 0 L21 -47 L4 -43 Z" fill="#E21E20" />
+            </g>
+            <g>
+              <path d="M132 86 L142 54 L172 34 L196 34 L208 42 L245 45 L278 60 L345 78 L366 84 L366 94 L126 94 Z" fill="#FDFDFD" opacity="0.85" />
+              <path d="M136 86 L143 60 C154 44, 174 35, 192 34 L195 39 L204 42 L212 52 L254 58 L272 67 L336 80 C344 82, 346 86, 338 89 L252 91 L134 91 Z" fill="#E21E20" />
+              <path d="M204 47 C222 40, 248 45, 260 61 L252 63 C242 51, 222 47, 206 52 Z" fill="#E21E20" />
+              <path d="M208 53 C223 48, 240 52, 249 62 L214 60 Z" fill="#FDFDFD" />
+              <g stroke="#FDFDFD" stroke-width="2" stroke-linecap="round">
+                <line x1="164" y1="53" x2="158" y2="62" />
+                <line x1="170" y1="53" x2="164" y2="62" />
+                <line x1="176" y1="53" x2="170" y2="62" />
+                <line x1="182" y1="53" x2="176" y2="62" />
+                <line x1="188" y1="53" x2="182" y2="62" />
+              </g>
+              <path d="M148 73 C172 68, 206 68, 244 74" fill="none" stroke="#FDFDFD" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M136 86 L256 86 L252 92 L134 92 Z" fill="#E21E20" />
+              <path d="M168 83 L244 83" stroke="#FDFDFD" stroke-width="1.5" />
+              <path d="M312 85 L368 88 L368 95 L306 94 Z" fill="#E21E20" />
+              <path d="M320 82 L364 85" stroke="#E21E20" stroke-width="2" stroke-linecap="round" />
+              <path d="M326 79 L358 82" stroke="#E21E20" stroke-width="1.6" stroke-linecap="round" />
+              <rect x="358" y="81" width="5" height="14" rx="1" fill="#E21E20" />
+              <circle cx="290" cy="76" r="21" fill="#FDFDFD" />
+              <circle cx="290" cy="76" r="19" fill="#E21E20" />
+              <circle cx="290" cy="76" r="15.5" fill="none" stroke="#FDFDFD" stroke-width="1.4" />
+              <circle cx="290" cy="76" r="12" fill="#FDFDFD" />
+              <circle cx="290" cy="76" r="10.5" fill="none" stroke="#4A4A4A" stroke-width="1.2" />
+              <g stroke="#4A4A4A" stroke-width="1.4" stroke-linecap="round">
+                <line x1="290" y1="65.5" x2="290" y2="86.5" />
+                <line x1="279.5" y1="76" x2="300.5" y2="76" />
+                <line x1="282.6" y1="68.6" x2="297.4" y2="83.4" />
+                <line x1="282.6" y1="83.4" x2="297.4" y2="68.6" />
+              </g>
+              <circle cx="290" cy="76" r="3.2" fill="#E21E20" />
+              <circle cx="290" cy="76" r="1.4" fill="#FDFDFD" />
+              <path d="M132 95 L264 95" stroke="#000000" stroke-width="1" opacity="0.25" />
+              <path d="M308 95 L368 95" stroke="#E21E20" stroke-width="1.5" />
+            </g>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <div class="bajada-band">
+      <p class="bajada-text">
+        Descubre cómo las diferencias de rendimiento en la pista y los recursos económicos de las escuderías marcan la competencia.
+      </p>
+    </div>
+
+    <!-- 2. GRÁFICO 1 + 3. ¿QUÉ NOS DICE? + PÁRRAFO 1 -->
+    <section class="story-section" aria-labelledby="g1-title">
+      <div class="section-heading-box title-texture">
+        <h2 id="g1-title" class="section-title">CAMPEÓN VS. SUBCAMPEÓN</h2>
+        <p class="section-subtitle">Fórmula 1 · 2000–2025 | Puntaje de los dos primeros lugares (pts)</p>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-swatch swatch-red"></span> 1.er lugar</span>
+          <span class="legend-item"><span class="legend-swatch swatch-blue"></span> 2.º lugar</span>
+          <span class="chart-note chart-note-right">Pasa el cursor sobre cualquier temporada para ver escuderías, puntaje y brecha</span>
+        </div>
+        <div class="chart-scroll">
+          <svg id="chart1" class="chart-svg" viewBox="0 0 1040 430" role="img" aria-label="Gráfico de barras agrupadas Campeón vs. Subcampeón 2000 a 2025"></svg>
+        </div>
+      </div>
+
+      <div class="narrative-row">
+        <div class="narrative-prompt">
+          <span>¿Qué nos dice?</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </div>
+        <div class="narrative-box">
+          <p>
+            Aunque a simple vista cada temporada de Fórmula 1 promete una batalla abierta entre veinte pilotos, los datos históricos de constructores entre 2000 y 2025 revelan que el dominio abrumador de una sola escudería es la regla y no la excepción. En ciclos marcados por Ferrari (2000-2004), Red Bull (2010-2013 y 2022-2023) y Mercedes (2014-2020), la brecha de puntos entre el campeón y el subcampeón evidencia una superioridad técnica sostenida que deja sin opciones reales al resto de la parrilla mucho antes del cierre del calendario.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GRÁFICO 2 + 5. ¿POR QUÉ IMPORTA? + PÁRRAFO 2 -->
+    <section class="story-section" aria-labelledby="g2-title">
+      <div class="section-heading-box title-texture">
+        <h2 id="g2-title" class="section-title">CUANDO UN PUNTO CUESTA UNA FORTUNA</h2>
+        <p class="section-subtitle">
+          La inversión de la F1 en la era del gasto libre · Desglose global 2015 a 2019. Selecciona en el menú de abajo 'Global' o una temporada específica para comparar el impacto financiero de las escuderías.
+        </p>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart2-layout">
+          <div class="chart-scroll">
+            <svg id="chart2" class="chart-svg" viewBox="0 0 880 460" role="img" aria-label="Gráfico de barras horizontales de presupuesto anual por escudería 2015 a 2019"></svg>
+          </div>
+          <aside class="chart2-side-legend" aria-label="Leyenda de categoría">
+            <div class="chart2-side-legend-title">Categoría</div>
+            <div class="legend-item"><span class="legend-swatch swatch-red"></span> Top 3</div>
+            <div class="legend-item"><span class="legend-swatch swatch-blue"></span> Zona Media</div>
+            <div class="legend-item"><span class="legend-swatch swatch-green"></span> Zona Baja</div>
+          </aside>
+        </div>
+
+        <div class="chart-controls">
+          <label class="control-group" for="seasonSelect">
+            <span>Temporada:</span>
+            <select id="seasonSelect" class="season-select">
+              <option value="global" selected>Global (2015-2019)</option>
+              <option value="2015">2015</option>
+              <option value="2016">2016</option>
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+            </select>
+          </label>
+          <span class="chart-note">Unidad: Millones de USD (mUSD) · El tooltip muestra Presupuesto, Puntos FIA y Costo por Punto (mUSD)</span>
+        </div>
+      </div>
+
+      <div class="narrative-row">
+        <div class="narrative-prompt">
+          <span>¿Por qué importa?</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </div>
+        <div class="narrative-box">
+          <p>
+            Esta desigualdad en la pista no es casualidad: responde directamente a la asimetría financiera y de inversión tecnológica entre los equipos de punta y la zona media. Incluso tras la implementación del límite presupuestario (Cost Cap) en 2021, el costo por cada punto obtenido demuestra cómo las escuderías con mayor infraestructura, desarrollo aerodinámico y capital logran transformar sus millones en rendimiento eficiente, perpetuando una brecha estructural donde no todos compiten en igualdad de condiciones.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. REFERENCIAS -->
+    <footer class="references-footer">
+      <div class="references-brand">
+        <div class="references-label">REFERENCIAS</div>
+        <svg class="footer-isotipo" viewBox="0 0 260 82" role="img" aria-label="Isotipo monoplaza F1">
+          <path d="M8 22 L34 22 L28 48 L12 48 Z" fill="#E21E20" />
+          <path d="M14 48 L28 48 L28 60 L14 60 Z" fill="#E21E20" />
+          <path d="M26 52 L34 36 C48 25, 68 18, 92 12 L97 6 L104 14 L112 31 L142 36 L160 40 L214 48 L244 57 L252 68 L178 68 L174 62 L74 62 L70 68 L28 68 Z" fill="#E21E20" />
+          <path d="M114 33 C128 24, 148 26, 160 39 L153 41 C143 31, 128 30, 117 36 Z" fill="#E21E20" />
+          <circle cx="132" cy="30" r="6" fill="#E21E20" />
+          <path d="M220 55 L254 62 L254 71 L216 71 Z" fill="#E21E20" />
+          <circle cx="52" cy="57" r="20" fill="#FDFDFD" />
+          <circle cx="52" cy="57" r="17.5" fill="#E21E20" />
+          <circle cx="52" cy="57" r="6.5" fill="#FDFDFD" />
+          <circle cx="52" cy="57" r="3" fill="#E21E20" />
+          <circle cx="198" cy="57" r="19" fill="#FDFDFD" />
+          <circle cx="198" cy="57" r="16.5" fill="#E21E20" />
+          <circle cx="198" cy="57" r="6" fill="#FDFDFD" />
+          <circle cx="198" cy="57" r="2.8" fill="#E21E20" />
+        </svg>
+      </div>
+      <p class="references-text">
+        FIA Formula One World Championship (2000–2025) – Clasificación Oficial del Campeonato de Constructores / Reportes financieros y estimaciones de presupuesto por escudería (FIA Financial Regulations, Forbes, Motorsport).
+      </p>
+    </footer>
+  </div>
+
+  <!-- Tooltip compartido -->
+  <div id="tooltip" class="tooltip" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      const SVG_NS = "http://www.w3.org/2000/svg";
+      const tooltip = document.getElementById("tooltip");
+
+      function createSvgEl(tag, attrs = {}, text = null) {
+        const el = document.createElementNS(SVG_NS, tag);
+        for (const [k, v] of Object.entries(attrs)) {
+          el.setAttribute(k, v);
+        }
+        if (text !== null) el.textContent = text;
+        return el;
+      }
+
+      function showTooltip(html, evt) {
+        tooltip.innerHTML = html;
+        tooltip.classList.add("visible");
+        positionTooltip(evt);
+      }
+
+      function positionTooltip(evt) {
+        const pad = 14;
+        const rect = tooltip.getBoundingClientRect();
+        let x = evt.clientX + pad;
+        let y = evt.clientY - rect.height - pad;
+
+        if (x + rect.width > window.innerWidth - 10) {
+          x = evt.clientX - rect.width - pad;
+        }
+        if (y < 10) {
+          y = evt.clientY + pad;
+        }
+        tooltip.style.left = `${Math.max(10, x)}px`;
+        tooltip.style.top = `${Math.max(10, y)}px`;
+      }
+
+      function hideTooltip() {
+        tooltip.classList.remove("visible");
+      }
+
+      function fmtNum(val, decimals = 1) {
+        return Number(val).toLocaleString("en-US", {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        });
+      }
+
+      /* =========================================================
+         BASE DE DATOS EXACTA GRÁFICO 1 (2000–2025)
+      ========================================================= */
+      const dataChart1 = [
+        { year: 2000, piloto: "Michael Schumacher", esc1: "Ferrari",  pts1: 108.0, esc2: "Mercedes",                pts2: 89.0,  brecha: 19.0 },
+        { year: 2001, piloto: "Michael Schumacher", esc1: "Ferrari",  pts1: 123.0, esc2: "Mercedes",                pts2: 65.0,  brecha: 58.0 },
+        { year: 2002, piloto: "Michael Schumacher", esc1: "Ferrari",  pts1: 144.0, esc2: "Ferrari",                 pts2: 77.0,  brecha: 67.0 },
+        { year: 2003, piloto: "Michael Schumacher", esc1: "Ferrari",  pts1: 93.0,  esc2: "Mercedes",                pts2: 91.0,  brecha: 2.0,  note: "Cambio sistema puntuación FIA (10-8-6-5-4-3-2-1)" },
+        { year: 2004, piloto: "Michael Schumacher", esc1: "Ferrari",  pts1: 148.0, esc2: "Ferrari",                 pts2: 114.0, brecha: 34.0 },
+        { year: 2005, piloto: "Fernando Alonso",    esc1: "Renault",  pts1: 133.0, esc2: "Mercedes",                pts2: 112.0, brecha: 21.0 },
+        { year: 2006, piloto: "Fernando Alonso",    esc1: "Renault",  pts1: 134.0, esc2: "Ferrari",                 pts2: 121.0, brecha: 13.0 },
+        { year: 2007, piloto: "Kimi Räikkönen",     esc1: "Ferrari",  pts1: 110.0, esc2: "Mercedes",                pts2: 109.0, brecha: 1.0 },
+        { year: 2008, piloto: "Lewis Hamilton",     esc1: "McLaren",  pts1: 98.0,  esc2: "Ferrari",                 pts2: 97.0,  brecha: 1.0 },
+        { year: 2009, piloto: "Jenson Button",      esc1: "Brawn",    pts1: 95.0,  esc2: "RBR Renault",             pts2: 84.0,  brecha: 11.0 },
+        { year: 2010, piloto: "Sebastian Vettel",   esc1: "RedBull",  pts1: 256.0, esc2: "Ferrari",                 pts2: 252.0, brecha: 4.0,  note: "Cambio sistema puntuación FIA (25-18-15-...)" },
+        { year: 2011, piloto: "Sebastian Vettel",   esc1: "RedBull",  pts1: 392.0, esc2: "McLaren Mercedes",        pts2: 270.0, brecha: 122.0 },
+        { year: 2012, piloto: "Sebastian Vettel",   esc1: "RedBull",  pts1: 281.0, esc2: "Ferrari",                 pts2: 278.0, brecha: 3.0 },
+        { year: 2013, piloto: "Sebastian Vettel",   esc1: "RedBull",  pts1: 397.0, esc2: "Ferrari",                 pts2: 242.0, brecha: 155.0 },
+        { year: 2014, piloto: "Lewis Hamilton",     esc1: "Mercedes", pts1: 384.0, esc2: "Mercedes",                pts2: 317.0, brecha: 67.0 },
+        { year: 2015, piloto: "Lewis Hamilton",     esc1: "Mercedes", pts1: 381.0, esc2: "Mercedes",                pts2: 322.0, brecha: 59.0 },
+        { year: 2016, piloto: "Nico Rosberg",       esc1: "Mercedes", pts1: 385.0, esc2: "Mercedes",                pts2: 380.0, brecha: 5.0 },
+        { year: 2017, piloto: "Lewis Hamilton",     esc1: "Mercedes", pts1: 363.0, esc2: "Ferrari",                 pts2: 317.0, brecha: 46.0 },
+        { year: 2018, piloto: "Lewis Hamilton",     esc1: "Mercedes", pts1: 408.0, esc2: "Ferrari",                 pts2: 320.0, brecha: 88.0 },
+        { year: 2019, piloto: "Lewis Hamilton",     esc1: "Mercedes", pts1: 413.0, esc2: "Mercedes",                pts2: 326.0, brecha: 87.0 },
+        { year: 2020, piloto: "Lewis Hamilton",     esc1: "Mercedes", pts1: 347.0, esc2: "Mercedes",                pts2: 223.0, brecha: 124.0 },
+        { year: 2021, piloto: "Max Verstappen",     esc1: "RedBull",  pts1: 395.5, esc2: "Mercedes",                pts2: 387.5, brecha: 8.0 },
+        { year: 2022, piloto: "Max Verstappen",     esc1: "RedBull",  pts1: 454.0, esc2: "Ferrari",                 pts2: 308.0, brecha: 146.0 },
+        { year: 2023, piloto: "Max Verstappen",     esc1: "RedBull",  pts1: 575.0, esc2: "RedBull Racing Honda RBPT", pts2: 285.0, brecha: 290.0 },
+        { year: 2024, piloto: "Max Verstappen",     esc1: "RedBull",  pts1: 437.0, esc2: "McLaren Mercedes",        pts2: 374.0, brecha: 63.0 },
+        { year: 2025, piloto: "Lando Norris",       esc1: "McLaren",  pts1: 423.0, esc2: "RedBull Racing",          pts2: 421.0, brecha: 2.0 }
+      ];
+
+      function renderChart1() {
+        const svg = document.getElementById("chart1");
+        svg.innerHTML = "";
+
+        const width = 1040;
+        const height = 430;
+        const margin = { top: 24, right: 20, bottom: 70, left: 66 };
+        const plotW = width - margin.left - margin.right;
+        const plotH = height - margin.top - margin.bottom;
+        const maxY = 600;
+
+        const yScale = (val) => margin.top + plotH - (val / maxY) * plotH;
+
+        for (let tick = 0; tick <= maxY; tick += 50) {
+          const y = yScale(tick);
+          svg.appendChild(createSvgEl("line", {
+            x1: margin.left,
+            y1: y,
+            x2: width - margin.right,
+            y2: y,
+            stroke: tick === 0 ? "#000000" : "#D9D9D9",
+            "stroke-width": tick === 0 ? 1.5 : 1
+          }));
+
+          svg.appendChild(createSvgEl("line", {
+            x1: margin.left - 5,
+            y1: y,
+            x2: margin.left,
+            y2: y,
+            stroke: "#000000",
+            "stroke-width": 1
+          }));
+
+          svg.appendChild(createSvgEl("text", {
+            x: margin.left - 10,
+            y: y + 4,
+            "text-anchor": "end",
+            "font-size": "11",
+            fill: "#333333"
+          }, String(tick)));
+        }
+
+        svg.appendChild(createSvgEl("line", {
+          x1: margin.left,
+          y1: margin.top,
+          x2: margin.left,
+          y2: margin.top + plotH,
+          stroke: "#000000",
+          "stroke-width": 1.5
+        }));
+
+        svg.appendChild(createSvgEl("text", {
+          x: 18,
+          y: margin.top + plotH / 2,
+          transform: `rotate(-90 18 ${margin.top + plotH / 2})`,
+          "text-anchor": "middle",
+          "font-size": "12",
+          "font-weight": "700",
+          fill: "#000000"
+        }, "Puntos del campeonato (pts)"));
+
+        svg.appendChild(createSvgEl("text", {
+          x: margin.left + plotW / 2,
+          y: height - 10,
+          "text-anchor": "middle",
+          "font-size": "12",
+          "font-weight": "700",
+          fill: "#000000"
+        }, "Temporada"));
+
+        const groupW = plotW / dataChart1.length;
+        [2003, 2010].forEach((markerYear) => {
+          const idx = dataChart1.findIndex((d) => d.year === markerYear);
+          const xPos = margin.left + idx * groupW;
+          svg.appendChild(createSvgEl("line", {
+            x1: xPos,
+            y1: margin.top,
+            x2: xPos,
+            y2: margin.top + plotH,
+            stroke: "#000000",
+            "stroke-width": 1,
+            "stroke-dasharray": "3,4",
+            opacity: "0.35"
+          }));
+          svg.appendChild(createSvgEl("text", {
+            x: xPos + 4,
+            y: margin.top + 12,
+            "font-size": "9.5",
+            "font-weight": "700",
+            fill: "#4A4A4A"
+          }, `Cambio FIA ${markerYear}`));
+        });
+
+        const barW = Math.min(13, (groupW - 10) / 2);
+        const gapBars = 2;
+        const barGroups = [];
+
+        dataChart1.forEach((d, idx) => {
+          const groupCenter = margin.left + idx * groupW + groupW / 2;
+          const x1 = groupCenter - barW - gapBars / 2;
+          const x2 = groupCenter + gapBars / 2;
+
+          const y1 = yScale(d.pts1);
+          const h1 = margin.top + plotH - y1;
+          const y2 = yScale(d.pts2);
+          const h2 = margin.top + plotH - y2;
+
+          const g = createSvgEl("g", { class: "bar-group-hover", tabindex: "0" });
+
+          g.appendChild(createSvgEl("rect", {
+            x: margin.left + idx * groupW,
+            y: margin.top,
+            width: groupW,
+            height: plotH,
+            fill: "transparent"
+          }));
+
+          const bg = createSvgEl("rect", {
+            x: margin.left + idx * groupW + 1,
+            y: margin.top,
+            width: groupW - 2,
+            height: plotH,
+            fill: "#D9D9D9",
+            opacity: "0"
+          });
+          g.appendChild(bg);
+
+          g.appendChild(createSvgEl("rect", {
+            x: x1,
+            y: y1,
+            width: barW,
+            height: h1,
+            rx: 2,
+            fill: "#E21E20"
+          }));
+
+          g.appendChild(createSvgEl("rect", {
+            x: x2,
+            y: y2,
+            width: barW,
+            height: h2,
+            rx: 2,
+            fill: "#004AAD"
+          }));
+
+          svg.appendChild(createSvgEl("line", {
+            x1: groupCenter,
+            y1: margin.top + plotH,
+            x2: groupCenter,
+            y2: margin.top + plotH + 5,
+            stroke: "#000000",
+            "stroke-width": 1
+          }));
+
+          const labelY = margin.top + plotH + 16;
+          svg.appendChild(createSvgEl("text", {
+            x: groupCenter,
+            y: labelY,
+            transform: `rotate(-55 ${groupCenter} ${labelY})`,
+            "text-anchor": "end",
+            "font-size": "11",
+            fill: "#222222"
+          }, String(d.year)));
+
+          const ttHtml = `
+            <div class="tt-title">
+              <span>Temporada ${d.year}</span>
+              <span class="tt-badge">Brecha: ${fmtNum(d.brecha, 1)} pts</span>
+            </div>
+            <div class="tt-row">
+              <span class="tt-label"><span class="tt-dot" style="background:#E21E20;"></span>1.er lugar · ${d.esc1}</span>
+              <span class="tt-val">${fmtNum(d.pts1, 1)} pts</span>
+            </div>
+            <div class="tt-row">
+              <span class="tt-label"><span class="tt-dot" style="background:#004AAD;"></span>2.º lugar · ${d.esc2}</span>
+              <span class="tt-val">${fmtNum(d.pts2, 1)} pts</span>
+            </div>
+            <div class="tt-sub">
+              Piloto campeón: <strong>${d.piloto}</strong> · Diferencia de puntos: <strong>${fmtNum(d.brecha, 1)}</strong>${d.note ? `<br/>• ${d.note}` : ""}
+            </div>
+          `;
+
+          barGroups.push({ g, bg });
+
+          function highlightActive() {
+            barGroups.forEach((item) => {
+              item.g.style.opacity = item.g === g ? "1" : "0.5";
+            });
+            bg.setAttribute("opacity", "0.22");
+          }
+
+          function clearHighlight() {
+            barGroups.forEach((item) => {
+              item.g.style.opacity = "1";
+            });
+            bg.setAttribute("opacity", "0");
+          }
+
+          g.addEventListener("mouseenter", (e) => {
+            highlightActive();
+            showTooltip(ttHtml, e);
+          });
+          g.addEventListener("mousemove", positionTooltip);
+          g.addEventListener("mouseleave", () => {
+            clearHighlight();
+            hideTooltip();
+          });
+          g.addEventListener("focus", () => {
+            const rect = g.getBoundingClientRect();
+            highlightActive();
+            showTooltip(ttHtml, { clientX: rect.left + rect.width / 2, clientY: rect.top + 30 });
+          });
+          g.addEventListener("blur", () => {
+            clearHighlight();
+            hideTooltip();
+          });
+
+          svg.appendChild(g);
+        });
+      }
+
+      /* =========================================================
+         BASE DE DATOS EXACTA GRÁFICO 2 (2015–2019)
+      ========================================================= */
+      const CATEGORY_COLORS = {
+        "Top 3": "#E21E20",
+        "Zona Media": "#004AAD",
+        "Zona Baja": "#2BB673",
+        "No Participó": "#D9D9D9"
+      };
+
+      const STACK_ORDER = {
+        "No Participó": 0,
+        "Top 3": 1,
+        "Zona Baja": 2,
+        "Zona Media": 3
+      };
+
+      const rawDataChart2 = [
+        { Equipo: "Mercedes", Año: 2015, Presupuesto_Millones_USD: 527.6, Categoria_Equipo: "Top 3", Puntos: 703, Costo_Por_Punto_Millones_USD: 0.75 },
+        { Equipo: "Ferrari", Año: 2015, Presupuesto_Millones_USD: 474.7, Categoria_Equipo: "Top 3", Puntos: 428, Costo_Por_Punto_Millones_USD: 1.11 },
+        { Equipo: "Williams", Año: 2015, Presupuesto_Millones_USD: 217.7, Categoria_Equipo: "Zona Media", Puntos: 257, Costo_Por_Punto_Millones_USD: 0.85 },
+        { Equipo: "Red Bull", Año: 2015, Presupuesto_Millones_USD: 532.5, Categoria_Equipo: "Top 3", Puntos: 187, Costo_Por_Punto_Millones_USD: 2.85 },
+        { Equipo: "Aston Martin (Force India)", Año: 2015, Presupuesto_Millones_USD: 147.3, Categoria_Equipo: "Zona Media", Puntos: 136, Costo_Por_Punto_Millones_USD: 1.08 },
+        { Equipo: "Alpine (Lotus/Renault)", Año: 2015, Presupuesto_Millones_USD: 149.8, Categoria_Equipo: "Zona Baja", Puntos: 78, Costo_Por_Punto_Millones_USD: 1.92 },
+        { Equipo: "AlphaTauri (Toro Rosso)", Año: 2015, Presupuesto_Millones_USD: 156.1, Categoria_Equipo: "Zona Baja", Puntos: 67, Costo_Por_Punto_Millones_USD: 2.33 },
+        { Equipo: "Alfa Romeo (Sauber)", Año: 2015, Presupuesto_Millones_USD: 117.2, Categoria_Equipo: "Zona Baja", Puntos: 36, Costo_Por_Punto_Millones_USD: 3.26 },
+        { Equipo: "McLaren", Año: 2015, Presupuesto_Millones_USD: 528.3, Categoria_Equipo: "Top 3", Puntos: 27, Costo_Por_Punto_Millones_USD: 19.57 },
+        { Equipo: "Haas", Año: 2015, Presupuesto_Millones_USD: 0.0, Categoria_Equipo: "No Participó", Puntos: 0, Costo_Por_Punto_Millones_USD: 0.0 },
+
+        { Equipo: "Mercedes", Año: 2016, Presupuesto_Millones_USD: 352.0, Categoria_Equipo: "Top 3", Puntos: 765, Costo_Por_Punto_Millones_USD: 0.46 },
+        { Equipo: "Red Bull", Año: 2016, Presupuesto_Millones_USD: 286.2, Categoria_Equipo: "Top 3", Puntos: 468, Costo_Por_Punto_Millones_USD: 0.61 },
+        { Equipo: "Ferrari", Año: 2016, Presupuesto_Millones_USD: 483.3, Categoria_Equipo: "Top 3", Puntos: 398, Costo_Por_Punto_Millones_USD: 1.21 },
+        { Equipo: "Aston Martin (Force India)", Año: 2016, Presupuesto_Millones_USD: 119.2, Categoria_Equipo: "Zona Media", Puntos: 173, Costo_Por_Punto_Millones_USD: 0.69 },
+        { Equipo: "Williams", Año: 2016, Presupuesto_Millones_USD: 139.6, Categoria_Equipo: "Zona Media", Puntos: 138, Costo_Por_Punto_Millones_USD: 1.01 },
+        { Equipo: "McLaren", Año: 2016, Presupuesto_Millones_USD: 246.4, Categoria_Equipo: "Zona Media", Puntos: 76, Costo_Por_Punto_Millones_USD: 3.24 },
+        { Equipo: "AlphaTauri (Toro Rosso)", Año: 2016, Presupuesto_Millones_USD: 132.8, Categoria_Equipo: "Zona Baja", Puntos: 63, Costo_Por_Punto_Millones_USD: 2.11 },
+        { Equipo: "Haas", Año: 2016, Presupuesto_Millones_USD: 117.0, Categoria_Equipo: "Zona Baja", Puntos: 29, Costo_Por_Punto_Millones_USD: 4.03 },
+        { Equipo: "Alpine (Renault)", Año: 2016, Presupuesto_Millones_USD: 199.8, Categoria_Equipo: "Zona Baja", Puntos: 8, Costo_Por_Punto_Millones_USD: 24.98 },
+        { Equipo: "Alfa Romeo (Sauber)", Año: 2016, Presupuesto_Millones_USD: 126.0, Categoria_Equipo: "Zona Baja", Puntos: 2, Costo_Por_Punto_Millones_USD: 63.0 },
+
+        { Equipo: "Mercedes", Año: 2017, Presupuesto_Millones_USD: 352.1, Categoria_Equipo: "Top 3", Puntos: 668, Costo_Por_Punto_Millones_USD: 0.53 },
+        { Equipo: "Ferrari", Año: 2017, Presupuesto_Millones_USD: 295.3, Categoria_Equipo: "Top 3", Puntos: 522, Costo_Por_Punto_Millones_USD: 0.57 },
+        { Equipo: "Red Bull", Año: 2017, Presupuesto_Millones_USD: 284.0, Categoria_Equipo: "Top 3", Puntos: 368, Costo_Por_Punto_Millones_USD: 0.77 },
+        { Equipo: "Aston Martin (Force India)", Año: 2017, Presupuesto_Millones_USD: 117.0, Categoria_Equipo: "Zona Media", Puntos: 187, Costo_Por_Punto_Millones_USD: 0.63 },
+        { Equipo: "Williams", Año: 2017, Presupuesto_Millones_USD: 136.3, Categoria_Equipo: "Zona Media", Puntos: 83, Costo_Por_Punto_Millones_USD: 1.64 },
+        { Equipo: "Alpine (Renault)", Año: 2017, Presupuesto_Millones_USD: 195.4, Categoria_Equipo: "Zona Media", Puntos: 57, Costo_Por_Punto_Millones_USD: 3.43 },
+        { Equipo: "AlphaTauri (Toro Rosso)", Año: 2017, Presupuesto_Millones_USD: 130.6, Categoria_Equipo: "Zona Baja", Puntos: 53, Costo_Por_Punto_Millones_USD: 2.46 },
+        { Equipo: "Haas", Año: 2017, Presupuesto_Millones_USD: 130.6, Categoria_Equipo: "Zona Baja", Puntos: 47, Costo_Por_Punto_Millones_USD: 2.78 },
+        { Equipo: "McLaren", Año: 2017, Presupuesto_Millones_USD: 240.8, Categoria_Equipo: "Zona Baja", Puntos: 30, Costo_Por_Punto_Millones_USD: 8.03 },
+        { Equipo: "Alfa Romeo (Sauber)", Año: 2017, Presupuesto_Millones_USD: 123.8, Categoria_Equipo: "Zona Baja", Puntos: 5, Costo_Por_Punto_Millones_USD: 24.76 },
+
+        { Equipo: "Mercedes", Año: 2018, Presupuesto_Millones_USD: 400.0, Categoria_Equipo: "Top 3", Puntos: 655, Costo_Por_Punto_Millones_USD: 0.61 },
+        { Equipo: "Ferrari", Año: 2018, Presupuesto_Millones_USD: 410.0, Categoria_Equipo: "Top 3", Puntos: 571, Costo_Por_Punto_Millones_USD: 0.72 },
+        { Equipo: "Red Bull", Año: 2018, Presupuesto_Millones_USD: 310.0, Categoria_Equipo: "Top 3", Puntos: 419, Costo_Por_Punto_Millones_USD: 0.74 },
+        { Equipo: "Alpine (Renault)", Año: 2018, Presupuesto_Millones_USD: 190.0, Categoria_Equipo: "Zona Media", Puntos: 122, Costo_Por_Punto_Millones_USD: 1.56 },
+        { Equipo: "Haas", Año: 2018, Presupuesto_Millones_USD: 130.0, Categoria_Equipo: "Zona Media", Puntos: 93, Costo_Por_Punto_Millones_USD: 1.4 },
+        { Equipo: "McLaren", Año: 2018, Presupuesto_Millones_USD: 220.0, Categoria_Equipo: "Zona Media", Puntos: 62, Costo_Por_Punto_Millones_USD: 3.55 },
+        { Equipo: "Aston Martin (Force India/Racing Point)", Año: 2018, Presupuesto_Millones_USD: 120.0, Categoria_Equipo: "Zona Baja", Puntos: 52, Costo_Por_Punto_Millones_USD: 2.31 },
+        { Equipo: "Alfa Romeo (Sauber)", Año: 2018, Presupuesto_Millones_USD: 135.0, Categoria_Equipo: "Zona Baja", Puntos: 48, Costo_Por_Punto_Millones_USD: 2.81 },
+        { Equipo: "AlphaTauri (Toro Rosso)", Año: 2018, Presupuesto_Millones_USD: 150.0, Categoria_Equipo: "Zona Baja", Puntos: 33, Costo_Por_Punto_Millones_USD: 4.55 },
+        { Equipo: "Williams", Año: 2018, Presupuesto_Millones_USD: 150.0, Categoria_Equipo: "Zona Baja", Puntos: 7, Costo_Por_Punto_Millones_USD: 21.43 },
+
+        { Equipo: "Mercedes", Año: 2019, Presupuesto_Millones_USD: 484.0, Categoria_Equipo: "Top 3", Puntos: 739, Costo_Por_Punto_Millones_USD: 0.65 },
+        { Equipo: "Ferrari", Año: 2019, Presupuesto_Millones_USD: 463.0, Categoria_Equipo: "Top 3", Puntos: 504, Costo_Por_Punto_Millones_USD: 0.92 },
+        { Equipo: "Red Bull", Año: 2019, Presupuesto_Millones_USD: 445.0, Categoria_Equipo: "Top 3", Puntos: 417, Costo_Por_Punto_Millones_USD: 1.07 },
+        { Equipo: "McLaren", Año: 2019, Presupuesto_Millones_USD: 269.0, Categoria_Equipo: "Zona Media", Puntos: 145, Costo_Por_Punto_Millones_USD: 1.86 },
+        { Equipo: "Alpine (Renault)", Año: 2019, Presupuesto_Millones_USD: 272.0, Categoria_Equipo: "Zona Media", Puntos: 91, Costo_Por_Punto_Millones_USD: 2.99 },
+        { Equipo: "AlphaTauri (Toro Rosso)", Año: 2019, Presupuesto_Millones_USD: 138.0, Categoria_Equipo: "Zona Media", Puntos: 85, Costo_Por_Punto_Millones_USD: 1.62 },
+        { Equipo: "Aston Martin (Racing Point)", Año: 2019, Presupuesto_Millones_USD: 188.0, Categoria_Equipo: "Zona Baja", Puntos: 73, Costo_Por_Punto_Millones_USD: 2.58 },
+        { Equipo: "Alfa Romeo (Sauber)", Año: 2019, Presupuesto_Millones_USD: 132.0, Categoria_Equipo: "Zona Baja", Puntos: 43, Costo_Por_Punto_Millones_USD: 3.07 },
+        { Equipo: "Haas", Año: 2019, Presupuesto_Millones_USD: 173.0, Categoria_Equipo: "Zona Baja", Puntos: 28, Costo_Por_Punto_Millones_USD: 6.18 },
+        { Equipo: "Williams", Año: 2019, Presupuesto_Millones_USD: 141.0, Categoria_Equipo: "Zona Baja", Puntos: 1, Costo_Por_Punto_Millones_USD: 141.0 }
+      ];
+
+      function renderChart2(seasonFilter = "global") {
+        const svg = document.getElementById("chart2");
+        svg.innerHTML = "";
+
+        const isGlobal = seasonFilter === "global";
+
+        const byTeam = new Map();
+        rawDataChart2.forEach((row) => {
+          if (!isGlobal && String(row.Año) !== seasonFilter) return;
+          if (isGlobal && row.Categoria_Equipo === "No Participó") return;
+
+          if (!byTeam.has(row.Equipo)) {
+            byTeam.set(row.Equipo, {
+              team: row.Equipo,
+              segments: [],
+              totalBudget: 0,
+              totalPoints: 0
+            });
+          }
+          const entry = byTeam.get(row.Equipo);
+          entry.segments.push(row);
+          entry.totalBudget += row.Presupuesto_Millones_USD;
+          entry.totalPoints += row.Puntos;
+        });
+
+        const rows = Array.from(byTeam.values())
+          .map((item) => {
+            item.segments.sort((a, b) => {
+              const catDiff = (STACK_ORDER[a.Categoria_Equipo] ?? 9) - (STACK_ORDER[b.Categoria_Equipo] ?? 9);
+              return catDiff !== 0 ? catDiff : a.Año - b.Año;
+            });
+            return item;
+          })
+          .sort((a, b) => b.totalBudget - a.totalBudget);
+
+        const width = 880;
+        const rowHeight = 29;
+        const margin = { top: 14, right: 26, bottom: 52, left: 224 };
+        const plotH = Math.max(240, rows.length * rowHeight);
+        const height = margin.top + plotH + margin.bottom;
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+        const plotW = width - margin.left - margin.right;
+        const maxX = isGlobal ? 2200 : 600;
+        const stepX = isGlobal ? 200 : 100;
+
+        const xScale = (val) => margin.left + (val / maxX) * plotW;
+
+        for (let tick = 0; tick <= maxX; tick += stepX) {
+          const x = xScale(tick);
+          svg.appendChild(createSvgEl("line", {
+            x1: x,
+            y1: margin.top,
+            x2: x,
+            y2: margin.top + plotH,
+            stroke: tick === 0 ? "#000000" : "#D9D9D9",
+            "stroke-width": tick === 0 ? 1.5 : 1
+          }));
+
+          svg.appendChild(createSvgEl("line", {
+            x1: x,
+            y1: margin.top + plotH,
+            x2: x,
+            y2: margin.top + plotH + 5,
+            stroke: "#000000",
+            "stroke-width": 1
+          }));
+
+          svg.appendChild(createSvgEl("text", {
+            x: x,
+            y: margin.top + plotH + 19,
+            "text-anchor": "middle",
+            "font-size": "11",
+            fill: "#333333"
+          }, tick.toLocaleString("en-US")));
+        }
+
+        svg.appendChild(createSvgEl("line", {
+          x1: margin.left,
+          y1: margin.top + plotH,
+          x2: width - margin.right,
+          y2: margin.top + plotH,
+          stroke: "#000000",
+          "stroke-width": 1.2
+        }));
+
+        svg.appendChild(createSvgEl("text", {
+          x: margin.left + plotW / 2,
+          y: height - 10,
+          "text-anchor": "middle",
+          "font-size": "12",
+          "font-weight": "700",
+          fill: "#000000"
+        }, "Presupuesto Anual (Millones de USD)"));
+
+        svg.appendChild(createSvgEl("text", {
+          x: 16,
+          y: margin.top + plotH / 2,
+          transform: `rotate(-90 16 ${margin.top + plotH / 2})`,
+          "text-anchor": "middle",
+          "font-size": "12",
+          "font-weight": "700",
+          fill: "#000000"
+        }, "Escudería"));
+
+        const barH = Math.min(22, rowHeight - 6);
+
+        rows.forEach((row, idx) => {
+          const cy = margin.top + idx * rowHeight + rowHeight / 2;
+          const yTop = cy - barH / 2;
+
+          svg.appendChild(createSvgEl("line", {
+            x1: margin.left - 5,
+            y1: cy,
+            x2: margin.left,
+            y2: cy,
+            stroke: "#000000",
+            "stroke-width": 1
+          }));
+
+          const displayName = row.team.length > 30 ? row.team.slice(0, 28) + "…" : row.team;
+          svg.appendChild(createSvgEl("text", {
+            x: margin.left - 10,
+            y: cy + 4,
+            "text-anchor": "end",
+            "font-size": "11",
+            fill: "#222222"
+          }, displayName));
+
+          let acc = 0;
+          row.segments.forEach((seg, sIdx) => {
+            const xStart = xScale(acc);
+            const rawSegW = xScale(acc + seg.Presupuesto_Millones_USD) - xStart;
+            const segW = seg.Presupuesto_Millones_USD === 0 ? 4 : Math.max(1.5, rawSegW);
+            acc += seg.Presupuesto_Millones_USD;
+
+            const color = CATEGORY_COLORS[seg.Categoria_Equipo] || "#D9D9D9";
+            const isLast = sIdx === row.segments.length - 1;
+
+            const rect = createSvgEl("rect", {
+              x: xStart,
+              y: yTop,
+              width: segW,
+              height: barH,
+              rx: isLast ? 3 : 0,
+              fill: color,
+              stroke: "#FDFDFD",
+              "stroke-width": "0.8",
+              class: "bar-seg",
+              tabindex: "0"
+            });
+
+            const globalCpp = row.totalPoints > 0 ? (row.totalBudget / row.totalPoints).toFixed(2) : "—";
+            const ttHtml = `
+              <div class="tt-title">
+                <span>${row.team}</span>
+                <span class="tt-badge" style="background:${color}; color:${seg.Categoria_Equipo === "No Participó" ? "#000" : "#FDFDFD"};">${seg.Año}</span>
+              </div>
+              <div class="tt-row">
+                <span class="tt-label"><span class="tt-dot" style="background:${color};"></span>Categoría: ${seg.Categoria_Equipo}</span>
+                <span class="tt-val">${fmtNum(seg.Presupuesto_Millones_USD, 1)} mUSD</span>
+              </div>
+              <div class="tt-row">
+                <span class="tt-label">Puntos FIA (${seg.Año})</span>
+                <span class="tt-val">${seg.Puntos} pts</span>
+              </div>
+              <div class="tt-row">
+                <span class="tt-label">Costo por Punto (${seg.Año})</span>
+                <span class="tt-val">${fmtNum(seg.Costo_Por_Punto_Millones_USD, 2)} mUSD / pt</span>
+              </div>
+              <div class="tt-sub">
+                ${isGlobal
+                  ? `Acumulado 2015–2019: <strong>${fmtNum(row.totalBudget, 1)} mUSD</strong> · ${row.totalPoints} pts (Prom: ${globalCpp} mUSD/pt)`
+                  : `Temporada ${seg.Año}: <strong>${fmtNum(seg.Presupuesto_Millones_USD, 1)} mUSD</strong>`}
+              </div>
+            `;
+
+            rect.addEventListener("mouseenter", (e) => showTooltip(ttHtml, e));
+            rect.addEventListener("mousemove", positionTooltip);
+            rect.addEventListener("mouseleave", hideTooltip);
+            rect.addEventListener("focus", () => {
+              const r = rect.getBoundingClientRect();
+              showTooltip(ttHtml, { clientX: r.left + r.width / 2, clientY: r.top });
+            });
+            rect.addEventListener("blur", hideTooltip);
+
+            svg.appendChild(rect);
+          });
+        });
+      }
+
+      renderChart1();
+      renderChart2("global");
+
+      document.getElementById("seasonSelect").addEventListener("change", function (e) {
+        renderChart2(e.target.value);
+      });
+    })();
+  </script>
+</body>
+</html>
